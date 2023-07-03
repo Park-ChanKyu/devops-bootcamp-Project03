@@ -1,0 +1,35 @@
+# 서비스 이름과 버전 정의
+service: sales-api
+frameworkVersion: '3'
+# 클라우드 제공자 정의
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-northeast-2
+  environment:
+    TOPIC_ARN: !Ref SuperTopic
+    HOSTNAME: [Database endpoint]
+    USERNAME: team9
+    PASSWORD: team9
+    DATABASE: team9
+  # SNS Publish를 하기 위한 IAM 역할 정의
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action: "sns:Publish"
+          Resource: !Ref SuperTopic
+# 핸들러를 사용하는 함수를 정의합니다. 이 함수는 httpApi 이벤트에 응답하며 모든 메소드를 포함합니다.
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - httpApi: '*'
+# 리소스 정의
+resources:
+  Resources:
+    # AWS SNS를 생성하고 주제를 정의합니다.
+    SuperTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: stock_empty

@@ -1,0 +1,18 @@
+service: stock-increase-lambda
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-northeast-2
+  environment:
+    HOSTNAME: project3db2.cpajpop7ewnt.ap-northeast-2.rds.amazonaws.com
+    USERNAME: team9
+    PASSWORD: team9
+    DATABASE: team9
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - httpApi: '*'
